@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useEffect, useState } from "react";
+import api from "./api/api";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [info, setInfo] = useState([])
+
+    useEffect(() => {
+      loadSneakers()
+    }, []);
+
+    const loadSneakers = async () => {
+      let data = await api.getSneakers();
+      setInfo(data)
+    };
+
+    return (
+        <div className="App">
+            {info && info.map(sneakers => {
+              return(
+                <div>
+                  <h1>{sneakers.name}</h1>
+                  <img src={sneakers.image.thumbnail} style={{width: 300}}/>
+                  </div>
+              )
+            })}
+        </div>
+    );
 }
 
 export default App;
